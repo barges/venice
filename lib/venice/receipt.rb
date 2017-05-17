@@ -29,14 +29,18 @@ module Venice
     attr_reader :download_id
     attr_reader :requested_at
 
-    # Original json response from AppStore
+    # Original parsed json response from AppStore
     attr_reader :original_json_response
+
+    # Original unparsed json response from AppStore
+    attr_reader :original_response_body
 
 
     attr_accessor :latest_receipt_info
 
     def initialize(attributes = {})
       @original_json_response = attributes['original_json_response']
+      @original_response_body = attributes['original_response_body']
 
       @bundle_id = attributes['bundle_id']
       @application_version = attributes['application_version']
