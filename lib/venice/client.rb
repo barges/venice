@@ -34,7 +34,10 @@ module Venice
 
       json = json_response_from_verifying_data(data)
       status, receipt_attributes = json['status'].to_i, json['receipt']
-      receipt_attributes['original_json_response'] = json if receipt_attributes
+      if receipt_attributes
+        receipt_attributes['original_json_response'] = json
+        receipt_attributes['original_response_body'] = @response_body
+      end
 
       case status
       when 0, 21006
@@ -78,6 +81,7 @@ module Venice
       request.body = parameters.to_json
 
       response = http.request(request)
+      @response_body = response.body
 
       JSON.parse(response.body)
     end
