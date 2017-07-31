@@ -37,6 +37,7 @@ module Venice
 
 
     attr_accessor :latest_receipt_info
+    attr_accessor :pending_renewal_info
 
     def initialize(attributes = {})
       @original_json_response = attributes['original_json_response']

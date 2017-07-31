@@ -42,6 +42,9 @@ module Venice
     # For a transaction that was canceled by Apple customer support, the time and date of the cancellation.
     attr_reader :cancellation_at
 
+    # For a transaction that was cancelled, the reason for cancellation. (Possible values: "1"/"0")
+    attr_reader :cancellation_reason
+
 
     def initialize(attributes = {})
       @quantity = Integer(attributes['quantity']) if attributes['quantity']
@@ -56,6 +59,10 @@ module Venice
 
       # cancellation_date is in ms since the Epoch, Time.at expects seconds
       @cancellation_at = Time.at(attributes['cancellation_date_ms'].to_i / 1000) if attributes['cancellation_date_ms']
+
+      if cancellation_reason = attributes['cancellation_reason']
+        @cancellation_reason = cancellation_reason.to_i
+      end
 
       if attributes['original_transaction_id'] || attributes['original_purchase_date']
         original_attributes = {

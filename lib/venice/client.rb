@@ -55,6 +55,20 @@ module Venice
           end
         end
 
+        # From Apple docs:
+        # > Only returned for iOS 7 style app receipts containing auto-renewable subscriptions.
+        # > In the JSON file, the value of this key is an array where each element contains
+        # > the pending renewal information for each auto-renewable subscription identified
+        # > by the Product Identifier
+        # > A pending renewal may refer to a renewal that is scheduled in the future or a renewal
+        # > that failed in the past for some reason.
+        if pending_renewal_info_attributes = json['pending_renewal_info']
+          receipt.pending_renewal_info = []
+          pending_renewal_info_attributes.each do |pending_renewal_info_attribute|
+            receipt.pending_renewal_info << OpenStruct.new(pending_renewal_info_attribute)
+          end
+        end
+
         return receipt
       else
         raise Receipt::VerificationError.new(status, receipt)
